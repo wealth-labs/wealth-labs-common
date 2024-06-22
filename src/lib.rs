@@ -26,9 +26,11 @@ mod web;
 pub use axum::{
 	self,
 	extract::Request,
+	middleware::from_fn as middleware_from_fn,
 	middleware::Next,
 	response::{IntoResponse, Response},
 	routing::{get, post},
+	Router,
 };
 #[cfg(feature = "web")]
 pub use web::{init as web_init, types::WebJsonResult, types::WebResponse, Config as WebConfig};
