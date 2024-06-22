@@ -15,7 +15,7 @@ mod database;
 #[cfg(feature = "database")]
 pub use database::{init as database_init, ins as database_ins, Config as DatabaseConfig};
 #[cfg(feature = "database")]
-pub use sea_orm::{self, sea_query::OnConflict, EntityTrait as _};
+pub use sea_orm::{self, sea_query::OnConflict, ActiveValue, EntityTrait as _};
 
 #[cfg(feature = "web")]
 mod web;
@@ -35,11 +35,11 @@ pub use serde_json::{self, Map as JsonMap, Value as Json};
 pub use serde_with::{self, serde_as};
 pub use std::{result::Result as StdResult, str::FromStr, time::Duration as StdDuration};
 pub use tokio::{
-	self, spawn,
-	sync::{
-		mpsc::{channel as mpsc_channel, Receiver as MpscReceiver, Sender as MpscSender},
-		Mutex,
-	},
-	time::sleep,
+    self, spawn,
+    sync::{
+        mpsc::{channel as mpsc_channel, Receiver as MpscReceiver, Sender as MpscSender},
+        Mutex,
+    },
+    time::sleep,
 };
 pub use tracing::{self, debug, error, info, instrument, warn};
