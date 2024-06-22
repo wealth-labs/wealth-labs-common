@@ -16,8 +16,12 @@ mod database;
 pub use database::{init as database_init, ins as database_ins, Config as DatabaseConfig};
 #[cfg(feature = "database")]
 pub use sea_orm::{
-	self, sea_query::OnConflict, ActiveModelBehavior, ActiveValue, DeriveActiveEnum,
-	DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
+	self, sea_query::OnConflict as SeaOrmOnConflict,
+	ActiveModelBehavior as SeaOrmActiveModelBehavior, ActiveValue as SeaOrmActiveValue,
+	DeriveActiveEnum as SeaOrmDeriveActiveEnum, DeriveEntityModel as OrmDeriveEntityModel,
+	DerivePrimaryKey as SeaOrmDerivePrimaryKey, DeriveRelation as SeaOrmDeriveRelation,
+	EntityTrait as SeaOrmEntityTrait, EnumIter as SeaOrmEnumIter,
+	PrimaryKeyTrait as SeaOrmPrimaryKeyTrait,
 };
 
 #[cfg(feature = "web")]
@@ -25,12 +29,12 @@ mod web;
 #[cfg(feature = "web")]
 pub use axum::{
 	self,
-	extract::Request,
-	middleware::from_fn as middleware_from_fn,
-	middleware::Next,
-	response::{IntoResponse, Response},
-	routing::{get, post},
-	Router,
+	extract::Request as AxumRequest,
+	middleware::from_fn as axum_middleware_from_fn,
+	middleware::Next as AxumMiddlewareNext,
+	response::{IntoResponse as AxumIntoResponse, Response as AxumResponse},
+	routing::{get as axum_get, post as axum_post},
+	Router as AxumRouter,
 };
 #[cfg(feature = "web")]
 pub use web::{init as web_init, types::WebJsonResult, types::WebResponse, Config as WebConfig};
