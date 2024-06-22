@@ -15,7 +15,7 @@ mod database;
 #[cfg(feature = "database")]
 pub use database::{init as database_init, ins as database_ins, Config as DatabaseConfig};
 #[cfg(feature = "database")]
-pub use sea_orm::{self, sea_query::OnConflict as _, EntityTrait as _};
+pub use sea_orm::{self, sea_query::OnConflict, EntityTrait as _};
 
 #[cfg(feature = "web")]
 mod web;
