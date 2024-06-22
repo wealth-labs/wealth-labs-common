@@ -16,14 +16,20 @@ mod database;
 pub use database::{init as database_init, ins as database_ins, Config as DatabaseConfig};
 #[cfg(feature = "database")]
 pub use sea_orm::{
-    self, sea_query::OnConflict, ActiveModelBehavior, ActiveValue, DeriveActiveEnum,
-    DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
+	self, sea_query::OnConflict, ActiveModelBehavior, ActiveValue, DeriveActiveEnum,
+	DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
 };
 
 #[cfg(feature = "web")]
 mod web;
 #[cfg(feature = "web")]
-pub use axum::{self, response::IntoResponse};
+pub use axum::{
+	self,
+	extract::Request,
+	middleware::Next,
+	response::{IntoResponse, Response},
+	routing::{get, post},
+};
 #[cfg(feature = "web")]
 pub use web::{init as web_init, types::WebJsonResult, types::WebResponse, Config as WebConfig};
 
@@ -38,11 +44,11 @@ pub use serde_json::{self, Map as JsonMap, Value as Json};
 pub use serde_with::{self, serde_as};
 pub use std::{result::Result as StdResult, str::FromStr, time::Duration as StdDuration};
 pub use tokio::{
-    self, spawn,
-    sync::{
-        mpsc::{channel as mpsc_channel, Receiver as MpscReceiver, Sender as MpscSender},
-        Mutex,
-    },
-    time::sleep,
+	self, spawn,
+	sync::{
+		mpsc::{channel as mpsc_channel, Receiver as MpscReceiver, Sender as MpscSender},
+		Mutex,
+	},
+	time::sleep,
 };
 pub use tracing::{self, debug, error, info, instrument, warn};
