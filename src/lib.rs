@@ -15,12 +15,15 @@ mod database;
 #[cfg(feature = "database")]
 pub use database::{init as database_init, ins as database_ins, Config as DatabaseConfig};
 #[cfg(feature = "database")]
-pub use sea_orm::{self, sea_query::OnConflict, ActiveValue, EntityTrait as _};
+pub use sea_orm::{
+    self, sea_query::OnConflict, ActiveModelBehavior, ActiveValue, DeriveActiveEnum,
+    DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
+};
 
 #[cfg(feature = "web")]
 mod web;
 #[cfg(feature = "web")]
-pub use axum::{self, response::IntoResponse as _};
+pub use axum::{self, response::IntoResponse};
 #[cfg(feature = "web")]
 pub use web::{init as web_init, types::WebJsonResult, types::WebResponse, Config as WebConfig};
 
