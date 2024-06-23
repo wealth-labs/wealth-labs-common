@@ -7,38 +7,36 @@ use tokio::sync::RwLock;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
-    pub url: String,
-    pub min_conn: u32,
-    pub max_conn: u32,
-    pub show_log: bool,
-    pub slow_query: u64,
+	pub url: String,
+	pub min_conn: u32,
+	pub max_conn: u32,
+	pub show_log: bool,
+	pub slow_query: u64,
 }
 
 static INS: Lazy<RwLock<HashMap<String, DatabaseConnection>>> =
-    Lazy::new(|| RwLock::new(HashMap::new()));
+	Lazy::new(|| RwLock::new(HashMap::new()));
 
 pub async fn ins(key: Option<&str>) -> DatabaseConnection {
-    INS.read().await.get(key.unwrap_or("")).cloned().unwrap()
+	INS.read().await.get(key.unwrap_or("")).cloned().unwrap()
 }
 
 pub async fn init(conf: &Config, key: Option<&str>) -> Result<()> {
-    let mut opts = ConnectOptions::new(conf.url.to_owned());
-    opts.min_connections(conf.min_conn);
-    opts.max_connections(conf.max_conn);
-    opts.sqlx_logging(conf.show_log);
-    if conf.show_log {
-        opts.sqlx_logging_level(log::LevelFilter::Info);
-        opts.sqlx_slow_statements_logging_settings(
-            log::LevelFilter::Warn,
-            Duration::from_millis(conf.slow_query),
-        );
-    }
+	let mut opts = ConnectOptions::new(conf.url.to_owned());
+	opts.min_connections(conf.min_conn);
+	opts.max_connections(conf.max_conn);
+	opts.sqlx_logging(conf.show_log);
+	if conf.show_log {
+		opts.sqlx_logging_level(log::LevelFilter::Info);
+		opts.sqlx_slow_statements_logging_settings(
+			log::LevelFilter::Warn,
+			Duration::from_millis(conf.slow_query),
+		);
+	}
 
-    let pool = Database::connect(opts).await?;
+	let pool = Database::connect(opts).await?;
 
-    INS.write()
-        .await
-        .insert(key.unwrap_or("").to_string(), pool);
+	INS.write().await.insert(key.unwrap_or("").to_string(), pool);
 
-    Ok(())
+	Ok(())
 }

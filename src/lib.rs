@@ -16,8 +16,9 @@ mod database;
 pub use database::{init as database_init, ins as database_ins, Config as DatabaseConfig};
 #[cfg(feature = "database")]
 pub use sea_orm::{
-	self, sea_query::OnConflict, ActiveModelBehavior, ActiveValue, DeriveActiveEnum,
-	DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
+	self, sea_query::Expr, sea_query::OnConflict, ActiveModelBehavior, ActiveValue, ColumnTrait,
+	DeriveActiveEnum, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait, EnumIter,
+	PrimaryKeyTrait, QueryFilter,
 };
 
 #[cfg(feature = "web")]
