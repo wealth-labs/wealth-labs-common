@@ -25,7 +25,7 @@ pub async fn request_time(request: Request, next: Next) -> Response {
 	let uri = request.uri().to_string();
 	let instant = Instant::now();
 	let response = next.run(request).in_current_span().await;
-	tracing::info!("method({}), uri({}) time({:?})", method, uri, instant.elapsed());
+	tracing::info!("method({}), uri({}), time({:?})", method, uri, instant.elapsed());
 	response
 }
 
