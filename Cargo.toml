@@ -26,7 +26,7 @@ time = { version = "0.3.36", features = ["macros"] }
 log = { version = "0.4.21", optional = true }
 once_cell = { version = "1.19.0" }
 rust_decimal = { version = "1.35.0", features = ["serde"] }
-sea-orm = { version = "0.12.15", features = [
+sea-orm = { version = "1.0.0-rc.6", features = [
     "runtime-tokio-rustls",
     "sqlx-postgres",
 ], optional = true }

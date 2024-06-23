@@ -36,12 +36,13 @@ async fn run(
 	mut notice: Receiver<()>,
 ) -> Result<()> {
 	let mut app = axum::Router::new();
-	app = app.layer(axum::middleware::from_fn(middleware::trace_id));
-	if show_log {
-		app = app.layer(axum::middleware::from_fn(middleware::logger));
-	}
-	app = app.fallback(middleware::handler_404);
 	app = register_router(app);
+	app = app.fallback(middleware::handler_404);
+	if show_log {
+		app = app.layer(axum::middleware::from_fn(middleware::request_time));
+	}
+	app = app.layer(axum::middleware::from_fn(middleware::web));
+
 	let listener = tokio::net::TcpListener::bind(listen).await?;
 	axum::serve(listener, app)
 		.with_graceful_shutdown(async move {

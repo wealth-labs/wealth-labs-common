@@ -5,35 +5,27 @@ use axum::{
 	response::{IntoResponse, Response},
 };
 use tokio::time::Instant;
-use tracing::info_span;
+use tracing::{info_span, Instrument};
 
-// ============================================================ //
-// Trace ID
-// ============================================================ //
-
-pub async fn trace_id(request: Request, next: Next) -> Response {
+pub async fn web(request: Request, next: Next) -> Response {
 	let trace_id = request
 		.headers()
 		.get("X-TRACE-ID")
 		.map(|v| v.to_str().map(|v| v.to_owned()).unwrap_or(crate::uuid()))
 		.unwrap_or(crate::uuid());
-	let _span = info_span!("traceid", value = trace_id);
+	let _span = info_span!("web", traceid = trace_id);
 	let _enter = _span.enter();
-	let response = next.run(request).await;
+	let response = next.run(request).in_current_span().await;
 	drop(_enter);
 	response
 }
 
-// ============================================================ //
-// Log
-// ============================================================ //
-
-pub async fn logger(request: Request, next: Next) -> Response {
+pub async fn request_time(request: Request, next: Next) -> Response {
 	let method = request.method().to_string();
 	let uri = request.uri().to_string();
 	let instant = Instant::now();
-	let response = next.run(request).await;
-	tracing::info!("http request: {} {} - {:?}", method, uri, instant.elapsed());
+	let response = next.run(request).in_current_span().await;
+	tracing::info!("request time: {} {} - {:?}", method, uri, instant.elapsed());
 	response
 }
 
