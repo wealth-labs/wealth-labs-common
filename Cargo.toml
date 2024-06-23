@@ -28,8 +28,7 @@ once_cell = { version = "1.19.0" }
 rust_decimal = { version = "1.35.0", features = ["serde"] }
 sea-orm = { version = "0.12.15", features = [
     "runtime-tokio-rustls",
-    "sqlx-all",
-    "proxy",
+    "sqlx-postgres",
 ], optional = true }
 async-trait = { version = "0.1.80" }
 reqwest = { version = "0.12.4", default-features = false, features = [
