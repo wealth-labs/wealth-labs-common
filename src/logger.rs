@@ -6,7 +6,7 @@ use tracing::subscriber::set_global_default;
 use tracing_appender::non_blocking;
 use tracing_subscriber::{
 	filter::LevelFilter,
-	fmt::{time::OffsetTime, Subscriber},
+	fmt::{self, format, time::OffsetTime, Subscriber},
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -31,6 +31,7 @@ pub fn init(conf: &Config) -> Result<()> {
 	let log_subscriber = Subscriber::builder()
 		.with_max_level(log_level)
 		.with_writer(log_writer)
+		.fmt_fields(format::PrettyFields::new().with_ansi(conf.ansi))
 		.event_format(
 			tracing_subscriber::fmt::format()
 				.with_level(true)
