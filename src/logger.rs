@@ -6,7 +6,7 @@ use tracing::subscriber::set_global_default;
 use tracing_appender::non_blocking;
 use tracing_subscriber::{
 	filter::LevelFilter,
-	fmt::{self, format, time::OffsetTime, Subscriber},
+	fmt::{format, time::OffsetTime, Subscriber},
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

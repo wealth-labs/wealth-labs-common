@@ -2,8 +2,11 @@ pub mod middleware;
 pub mod types;
 
 use anyhow::Result;
+use axum::http::Request;
 use serde::{Deserialize, Serialize};
 use tokio::sync::mpsc::{channel, Receiver};
+use tower_http::trace::TraceLayer;
+use tracing::info_span;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
@@ -41,7 +44,14 @@ async fn run(
 	if show_log {
 		app = app.layer(axum::middleware::from_fn(middleware::request_time));
 	}
-	app = app.layer(axum::middleware::from_fn(middleware::web));
+	app = app.layer(TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
+		let trace_id = request
+			.headers()
+			.get("X-TRACE-ID")
+			.map(|v| v.to_str().map(|v| v.to_owned()).unwrap_or(crate::uuid()))
+			.unwrap_or(crate::uuid());
+		info_span!("web", traceid = trace_id)
+	}));
 
 	let listener = tokio::net::TcpListener::bind(listen).await?;
 	axum::serve(listener, app)

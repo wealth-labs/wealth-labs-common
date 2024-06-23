@@ -5,20 +5,6 @@ use axum::{
 	response::{IntoResponse, Response},
 };
 use tokio::time::Instant;
-use tracing::info_span;
-
-pub async fn web(request: Request, next: Next) -> Response {
-	let trace_id = request
-		.headers()
-		.get("X-TRACE-ID")
-		.map(|v| v.to_str().map(|v| v.to_owned()).unwrap_or(crate::uuid()))
-		.unwrap_or(crate::uuid());
-	let _span = info_span!("web", traceid = trace_id);
-	let _enter = _span.enter();
-	let response = next.run(request).await;
-	drop(_enter);
-	response
-}
 
 pub async fn request_time(request: Request, next: Next) -> Response {
 	let method = request.method().to_string().to_lowercase();
