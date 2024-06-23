@@ -21,7 +21,7 @@ pub async fn web(request: Request, next: Next) -> Response {
 }
 
 pub async fn request_time(request: Request, next: Next) -> Response {
-	let method = request.method().to_string();
+	let method = request.method().to_string().to_lowercase();
 	let uri = request.uri().to_string();
 	let instant = Instant::now();
 	let response = next.run(request).in_current_span().await;
