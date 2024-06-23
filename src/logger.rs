@@ -28,6 +28,7 @@ pub fn init(conf: &Config) -> Result<()> {
 
 	let (log_writer, guard) = non_blocking(std::io::stdout());
 
+	#[allow(deprecated)]
 	let log_subscriber = Subscriber::builder()
 		.with_max_level(log_level)
 		.with_writer(log_writer)
